@@ -1,0 +1,17 @@
+[project]
+name = "gif_search_api"
+version = "0.1"
+dependencies = [
+    "asyncio==3.4.3",
+    "fastapi==0.109.0",
+    "numpy==1.26.2",
+    "pydantic==2.5.1",
+    "uvicorn==0.25.0",
+    "pinecone-client==3.1.0",
+    "pandas",
+    "tqdm",
+    "sentence-transformers"
+]
+
+[project.optional-dependencies]
+dev = ["black", "flake8"]

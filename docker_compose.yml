@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  gif_search_index:
+    build:
+      context: gif_search_index
+    env_file:
+      - .env
+
+  gif_search_api:
+    build:
+      context: gif_search_api
+    env_file:
+      - .env
+    depends_on:
+      - gif_search_index
+    ports:
+      - "8000:8000"
