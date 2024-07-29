@@ -82,3 +82,16 @@ for i in tqdm(range(0, len(df), batch_size)):
     _ = index.upsert(vectors=to_upsert)
 
 print(index.describe_index_stats())
+
+
+def gif_search(query):
+    # Generate embeddings for the query
+    xq = retriever.encode(query).tolist()
+    # Compute cosine similarity between query and embeddings vectors and gif description
+    xc = index.query(vector=xq, top_k=10, include_metadata=True)
+    result = []
+    for context in xc['matches']:
+        url = context['metadata']['url']
+        result.append(url)
+    return result
+
