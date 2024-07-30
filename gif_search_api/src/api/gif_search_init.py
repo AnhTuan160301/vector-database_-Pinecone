@@ -6,8 +6,8 @@ from sentence_transformers import SentenceTransformer
 
 def init_pinecone(key: str):
     # find API key at app.pinecone.io
-    pinecone.init(api_key=key, environment="us-west1-gcp")
-    return pinecone.Index('gif-search')
+    pc = pinecone.Pinecone(api_key=key, environment="us-west1-gcp")
+    return pc.Index('gif-search')
 
 
 def init_retriever():

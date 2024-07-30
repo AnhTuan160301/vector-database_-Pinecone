@@ -16,3 +16,13 @@ services:
       - gif_search_index
     ports:
       - "8000:8000"
+
+  gif_search_frontend:
+    build:
+      context: gif_search_frontend
+    env_file:
+      - .env
+    depends_on:
+      - gif_search_api
+    ports:
+      - "8501:8501"

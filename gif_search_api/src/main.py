@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-from gif_search_api.src.api.gif_search_init import index, retriever
-from gif_search_api.src.models.gif_search_model import SearchQueryInput, SearchQueryOutput
-from gif_search_api.src.utils.async_utils import async_retry
+from api.gif_search_init import index, retriever
+from models.gif_search_model import SearchQueryInput, SearchQueryOutput
 
 app = FastAPI(
     title="GIF search",
@@ -9,8 +8,7 @@ app = FastAPI(
 )
 
 
-@async_retry(max_retries=10, delay=1)
-async def gif_search(query):
+def gif_search(query):
     # Generate embeddings for the query
     xq = retriever.encode(query).tolist()
     # Compute cosine similarity between query and embeddings vectors and gif description
@@ -19,7 +17,7 @@ async def gif_search(query):
     for context in xc['matches']:
         url = context['metadata']['url']
         result.append(url)
-    return await result
+    return result
 
 
 @app.get("/")
@@ -28,10 +26,12 @@ async def get_status():
 
 
 @app.post("/gif-search")
-async def query_hospital_agent(query: SearchQueryInput) -> SearchQueryOutput:
-    query_response = await gif_search(query.text)
-    query_response["intermediate_steps"] = [
-        str(s) for s in query_response["intermediate_steps"]
-    ]
+async def query_search_agent(query: SearchQueryInput) -> SearchQueryOutput:
+    urls = gif_search(query.text)
+    external_data = {
+        "input": query.text,
+        "output": [url for url in urls],
+    }
+    query_response = SearchQueryOutput(**external_data)
 
     return query_response

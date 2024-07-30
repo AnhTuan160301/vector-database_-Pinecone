@@ -7,5 +7,4 @@ class SearchQueryInput(BaseModel):
 
 class SearchQueryOutput(BaseModel):
     input: str
-    output: str
-    intermediate_steps: list[str]
+    output: list[str]
